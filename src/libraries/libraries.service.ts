@@ -41,22 +41,25 @@ export class LibrariesService {
     return await this.prisma.library.create({
       data: { ...createLibraryDto },
       select: {
-        id: true,
+       
         requesterCategory: true,
         dateBookOut: true,
         dateBookDue: true,
         book: {
           select: {
+            
             isbn: true,
             title: true,
             publisher: true,
             author: {
               select: {
+              
                 name: true,
               },
             },
             category: {
               select: {
+               
                 name: true,
               },
             },
@@ -64,6 +67,7 @@ export class LibrariesService {
         },
         user: {
           select: {
+           
             name: true,
             email: true,
             phone: true,
@@ -76,23 +80,26 @@ export class LibrariesService {
 
   async findAll(): Promise<LibraryInfo[]> {
     return await this.prisma.library.findMany({
-      select: {
-        id: true,
+      select: {            
+        id: true,        
         requesterCategory: true,
         dateBookOut: true,
         dateBookDue: true,
         book: {
           select: {
+            id: true,
             isbn: true,
             title: true,
             publisher: true,
             author: {
               select: {
+                id: true,
                 name: true,
               },
             },
             category: {
               select: {
+                id: true,
                 name: true,
               },
             },
@@ -100,6 +107,7 @@ export class LibrariesService {
         },
         user: {
           select: {
+            id: true,
             name: true,
             email: true,
             phone: true,

@@ -56,8 +56,8 @@ model User {
   email        String     @unique @db.VarChar(255)
   phone        String     @db.VarChar(255)
   password     String     @db.VarChar(255)
-  department   Department @relation(fields: [departmentId], references: [id])
-  departmentId String
+  department   Department? @relation(fields: [departmentId], references: [id])
+  departmentId String?   
   userType     UserType   @default(Student)
   gender       Gender     @default(Male)
   libraryUsers Library[]

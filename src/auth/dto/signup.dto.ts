@@ -18,9 +18,9 @@ export class SignupDto {
   @IsNotEmpty()
   @IsString()
   confirmPassword: string;
-  @IsNotEmpty()
-  @IsString()
+  @IsOptional()
   departmentId: string;
+  @IsOptional()
   @IsEnum(UserType)
   userType: UserType;
   @IsOptional()

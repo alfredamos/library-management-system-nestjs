@@ -50,7 +50,30 @@ export class BooksService {
   }
 
   async findAll(): Promise<Book[]> {
-    return await this.prisma.book.findMany({});
+    return await this.prisma.book.findMany({
+      select: {
+            isbn: true,
+            id: true,
+            title: true,
+            publisher: true,
+            volume: true,
+            edition: true,
+            dateOfPublication: true,
+            quantity: true,
+            authorId: true,
+            author: {
+              select: {
+                name: true,
+              },
+            },
+            bookCatId: true,
+            category: {
+              select: {
+                name: true,
+            },
+          }
+      },
+    })
   }
 
   async findOne(id: string): Promise<Book> {

@@ -1,6 +1,6 @@
 import { Reflector } from '@nestjs/core';
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { UserInfo } from '../models/user-info.model';
+import { AuthUser } from '../models/user-info.model';
 import { UserType } from '@prisma/client';
 
 @Injectable()
@@ -25,7 +25,7 @@ export class RolesGuard implements CanActivate {
         const request = context.switchToHttp().getRequest();
         
         //----> Get the user from the request object.
-        const user = request.user as UserInfo;
+        const user = request.user as AuthUser;
 
         //----> Check if the roles matches those who are permitted to view or use the available resources.
         return this.matchRoles(roles, user?.userType);

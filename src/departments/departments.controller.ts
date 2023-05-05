@@ -4,6 +4,7 @@ import { CreateDepartmentDto } from './dto/create-department.dto';
 import { UpdateDepartmentDto } from './dto/update-department.dto';
 import { Roles } from 'src/decorators/roles.decorator';
 import {AllUserCategories} from 'src/constants/all-category.constant'
+import { IsPublic } from 'src/decorators/is-public.decorator';
 
 @Controller('departments')
 export class DepartmentsController {
@@ -16,6 +17,7 @@ export class DepartmentsController {
   }
 
   @Roles(...AllUserCategories)
+  @IsPublic()
   @Get()
   findAll() {
     return this.departmentsService.findAll();

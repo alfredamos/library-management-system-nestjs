@@ -5,8 +5,9 @@ import { LoginDto } from './dto/login.dto';
 import { SignupDto } from './dto/signup.dto';
 import {PrismaService} from 'src/prisma/prisma.service';
 import * as bcrypt from "bcrypt";
-import {UserInfo} from 'src/models/user-info.model';
+import {AuthUser} from 'src/models/user-info.model';
 import { JwtService } from '@nestjs/jwt';
+import { UserType } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,7 @@ export class AuthService {
     private jwt: JwtService
     ){}
 
-  async changePassword(changePasswordDto: ChangePasswordDto): Promise<UserInfo> {
+  async changePassword(changePasswordDto: ChangePasswordDto): Promise<AuthUser> {
     const {email, oldPassword, newPassword, confirmPassword} = changePasswordDto;
 
     //----> Check the equality of newPassword and confirmPassword.
@@ -51,19 +52,20 @@ export class AuthService {
     });
 
     //----> User information to be sent to client.
-    const userInfo: UserInfo = {
+    const authUser: AuthUser = {
       id: updatedUserCredentials.id,
       name: updatedUserCredentials.name,
       userType: updatedUserCredentials.userType,
       message: 'Password is changed successfully',
+      user: updatedUserCredentials
 
     }
 
     //----> Send the user info to client.
-    return userInfo;
+    return authUser;
   }
 
-  async editProfile(editProfileDto: EditProfileDto): Promise<UserInfo> {
+  async editProfile(editProfileDto: EditProfileDto): Promise<AuthUser> {
     const { email, password } = editProfileDto;
 
     //----> Check the existence of email.
@@ -105,18 +107,19 @@ export class AuthService {
     });
 
     //----> Make user information object to be sent to client.
-    const userInfo: UserInfo = {
+    const authUser: AuthUser = {
       id: updatedUserProfile.id,
       name: updatedUserProfile.name,
       userType: updatedUserProfile.userType,
       message: 'User profile updated successfully',
+      user: updatedUserProfile
     };
 
     //----> Send the user information to client.
-    return userInfo;
+    return authUser;
   }
 
-  async login(loginDto: LoginDto): Promise<UserInfo> {
+  async login(loginDto: LoginDto): Promise<AuthUser> {
     const { email, password } = loginDto;
 
     //----> Check the existence of email.
@@ -136,11 +139,16 @@ export class AuthService {
       throw new ForbiddenException('Invalid credentials.');
     }
 
+    delete user.password;
+
     //----> Make user information payload for Jwt..
-    const userPayload: UserInfo = {
+    const userPayload: AuthUser = {
       id: user.id,
       name: user.name,
-      userType: user.userType,      
+      userType: user.userType, 
+      isAdmin: user.userType === UserType.Admin,
+      isLoggedIn: true,  
+      user: user,   
     };
 
     //----> Get JWT token from JWT Service Provider.
@@ -154,7 +162,7 @@ export class AuthService {
     };
   }
 
-  async signup(signupDto: SignupDto): Promise<UserInfo> {
+  async signup(signupDto: SignupDto): Promise<AuthUser> {
     const { email, password } = signupDto;
 
     //----> Check the existence of email.
@@ -188,14 +196,15 @@ export class AuthService {
     });
 
     //----> Make user information object to be sent to client.
-    const userInfo: UserInfo = {
+    const authAuthUser: AuthUser = {
       id: newUser.id,
       name: newUser.name,
       userType: newUser.userType,
       message: 'Signup is successfully',
+      user: newUser
     };
 
     //----> Send the user information to client.
-    return userInfo;
+    return authAuthUser;
   }
 }

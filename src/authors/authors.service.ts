@@ -31,6 +31,7 @@ export class AuthorsService {
   }
 
   async update(id: string, updateAuthorDto: UpdateAuthorDto): Promise<Author> {
+    
     const author = await this.prisma.author.findUnique({
       where: { id },
     });
