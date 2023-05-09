@@ -85,6 +85,8 @@ export class LibrariesService {
         requesterCategory: true,
         dateBookOut: true,
         dateBookDue: true,
+        bookId: true,
+        userId: true,
         book: {
           select: {
             id: true,
@@ -104,7 +106,7 @@ export class LibrariesService {
               },
             },
           },
-        },
+        },       
         user: {
           select: {
             id: true,
@@ -126,6 +128,8 @@ export class LibrariesService {
         requesterCategory: true,
         dateBookOut: true,
         dateBookDue: true,
+        bookId: true,
+        userId: true,
         book: {
           select: {
             isbn: true,

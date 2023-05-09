@@ -79,6 +79,28 @@ export class BooksService {
   async findOne(id: string): Promise<Book> {
     const book = await this.prisma.book.findUnique({
       where: { id },
+      select: {
+        isbn: true,
+        id: true,
+        title: true,
+        publisher: true,
+        volume: true,
+        edition: true,
+        dateOfPublication: true,
+        quantity: true,
+        authorId: true,
+        author: {
+          select: {
+            name: true,
+          },
+        },
+        bookCatId: true,
+        category: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
 
     if (!book) {
